@@ -1,6 +1,7 @@
 import tkinter as tk
 from login import LoginPage
 from register import RegisterPage
+from create_profile import CreateProfilePage
 
 
 class MainFrame(tk.Tk):
@@ -16,7 +17,7 @@ class MainFrame(tk.Tk):
         container.grid_columnconfigure(0, minsize=1150, weight=1)
 
         self.frames = {}
-        frame_list = (LoginPage, RegisterPage)
+        frame_list = (LoginPage, RegisterPage, CreateProfilePage)
 
         for f in frame_list:
             frame = f(container, self)
