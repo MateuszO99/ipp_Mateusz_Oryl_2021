@@ -1,6 +1,7 @@
 import tkinter as tk
 from constans import LARGE_FONT, NORMAL_FONT
-from check_length import check_length
+from warnings_message import warning_message, clear
+from password_config import password_config, clear_text
 
 
 class RegisterPage(tk.Frame):
@@ -24,51 +25,79 @@ class RegisterPage(tk.Frame):
         password1 = tk.Label(self, text='Password:', font=NORMAL_FONT)
         password1.place(x=454, y=340, anchor='center')
 
-        self.password1_field = tk.Entry(self, show='*', width=20, font=NORMAL_FONT)
+        self.password1_field = tk.Entry(self, show='*', width=20,
+                                        font=NORMAL_FONT,)
         self.password1_field.place(x=645, y=340, anchor='center')
 
         password2 = tk.Label(self, text='Repeat password:', font=NORMAL_FONT)
         password2.place(x=413, y=380, anchor='center')
 
-        self.password2_field = tk.Entry(self, show='*', width=20, font=NORMAL_FONT)
+        self.password2_field = tk.Entry(self, show='*', width=20,
+                                        font=NORMAL_FONT)
         self.password2_field.place(x=645, y=380, anchor='center')
 
-        register_button = tk.Button(self, text='Sign up', font=NORMAL_FONT, command=self.register)
+        register_button = tk.Button(self, text='Sign up', font=NORMAL_FONT,
+                                    command=self.register)
         register_button.place(x=463, y=430, anchor='center')
 
         login_button = tk.Button(self, text='Login', font=NORMAL_FONT,
-                                 command=lambda: self.controller.show_frame('LoginPage'))
+                                 command=self.go_to_login_page)
         login_button.place(x=555, y=430, anchor='center')
 
     def register(self):
-        if len(self.username_field.get()) == 0 or len(self.password1_field.get()) == 0 \
-                or len(self.password2_field.get()) == 0:
-            self.warning_message('You have to complete the form!')
+        coordinates = [960, 320]
+
+        if len(self.username_field.get()) == 0 or \
+                len(self.password1_field.get()) == 0 or \
+                len(self.password2_field.get()) == 0:
+            warning_message(self, 'You have to complete the form!',
+                            coordinates)
         else:
             if not (' ' in self.username_field.get()):
                 if self.password1_field.get() == self.password2_field.get():
                     if len(self.password1_field.get()) >= 8:
-                        username = check_length(self.username_field.get(), 255)
-                        password = check_length(self.password1_field.get(), 255)
+                        message = password_config(
+                            self.username_field,
+                            self.password1_field,
+                            'register'
+                        )
 
-                        message = f'register {username} {password}'
-                        receive_message = self.controller.connection.send_message(message)
+                        receive_message = self.controller.connection
+                        msg = receive_message.send_message(message)
 
-                        if receive_message == 'register_true':
-                            self.controller.show_frame('CreateProfilePage')
+                        if msg == 'register_true':
+                            clear(self)
+                            clear_text(
+                                self.username_field,
+                                self.password1_field,
+                                self.password2_field,
+                            )
+                            self.controller.show_frame('ProfilePage', True)
                         else:
-                            self.warning_message('This the username is unavailable!')
+                            warning_message(
+                                self,
+                                'This the username is unavailable!',
+                                coordinates,
+                            )
 
                     else:
-                        self.warning_message('Password is too short!\nAt least 8 character')
+                        warning_message(
+                            self,
+                            'Password is too short!\nAt least 8 character',
+                            coordinates,
+                        )
                 else:
-                    self.warning_message('Passwords are not the same!')
+                    warning_message(self, 'Passwords are not the same!',
+                                    coordinates)
             else:
-                self.warning_message('Username have to be one word!')
+                warning_message(self, 'Username have to be one word!',
+                                coordinates)
 
-    def warning_message(self, text_message):
-        if self.warning_msg is not None:
-            self.warning_msg.destroy()
-
-        self.warning_msg = tk.Label(self, text=text_message, font=NORMAL_FONT, fg='red')
-        self.warning_msg.place(x=960, y=320, anchor='center')
+    def go_to_login_page(self):
+        clear(self)
+        clear_text(
+            self.username_field,
+            self.password1_field,
+            self.password2_field,
+        )
+        self.controller.show_frame('LoginPage')

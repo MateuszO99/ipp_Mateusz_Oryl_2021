@@ -1,8 +1,9 @@
 import socket
+import pickle
+from constans import HEADER_SIZE
 
 IP = socket.gethostbyname(socket.gethostname())
 PORT = 5050
-HEADER_SIZE = 10
 FORMAT = "utf-8"
 
 
@@ -15,13 +16,13 @@ class ClientConnection:
 
     def send_message(self, message):
         """Send message to the server"""
-        message_length = f'{len(message):<{HEADER_SIZE}}'
-        message = message_length + message
-        self.client.send(message.encode(FORMAT))
+        msg = pickle.dumps(message)
+        msg = bytes(f'{len(msg):<{HEADER_SIZE}}', FORMAT) + msg
+        self.client.send(msg)
         return self.receive_message()
 
     def receive_message(self):
-        msg = ''
+        msg = b''
         msg_length = 0
         new_msg = True
 
@@ -33,9 +34,10 @@ class ClientConnection:
                     new_msg = False
                     continue
 
-                msg += message.decode(FORMAT)
+                msg += message
 
                 if msg_length == len(msg):
+                    msg = pickle.loads(msg)
                     return msg
 
         except ValueError:

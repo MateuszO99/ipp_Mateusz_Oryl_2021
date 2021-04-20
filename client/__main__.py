@@ -1,10 +1,12 @@
-import queue
 from client_connection import ClientConnection
 from main_frame import MainFrame
 
 
 def main():
-    connection = ClientConnection()
+    try:
+        connection = ClientConnection()
+    except ConnectionRefusedError:
+        connection = None
 
     frame = MainFrame(connection)
     frame.mainloop()
