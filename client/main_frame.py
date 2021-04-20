@@ -21,8 +21,6 @@ class MainFrame(tk.Tk):
         self.connection = connection
         self.cancel_button_status = False
 
-        tk.Tk.wm_title(self, 'Tinder')
-
         container = tk.Frame(self)
         container.pack(side='top', fill='both', expand=True)
         container.grid_rowconfigure(0, minsize=900, weight=1)
