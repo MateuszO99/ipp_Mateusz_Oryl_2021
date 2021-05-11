@@ -41,7 +41,7 @@ class DisplayProfilePage(tk.Frame):
             font=NORMAL_FONT,
             command=self.back,
         )
-        back_button.place(x=524, y=470, anchor='center')
+        back_button.place(x=1300, y=850, anchor='center')
 
     def display(self):
         message = f'user_profile'

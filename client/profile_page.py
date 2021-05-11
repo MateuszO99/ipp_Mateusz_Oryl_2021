@@ -93,13 +93,13 @@ class ProfilePage(tk.Frame):
                             [950, 690])
         else:
             name = change_sign(self.name_field)
-            name = check_length(name, 50)
+            name = check_length(name, 16)
 
             last_name = change_sign(self.last_name_field)
-            last_name = check_length(last_name, 50)
+            last_name = check_length(last_name, 16)
 
             description = change_sign(self.description_field, True)
-            description = check_length(description, 1000)
+            description = check_length(description, 500)
 
             with open(self.file_name, 'rb') as image:
                 self.profile_image = image.read()

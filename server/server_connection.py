@@ -76,6 +76,9 @@ class ServerConnection:
                                 self.delete_user(client_socket, user_id)
                             elif mode == 'user_profile':
                                 self.display_user(user_id, client_socket)
+                            elif mode == 'user_profiles':
+                                self.display_users(user_id, client_socket,
+                                                   message_content)
                         break
 
             except ValueError:
@@ -144,13 +147,30 @@ class ServerConnection:
 
     def display_user(self, user_id, client_socket):
         user_info = self.database_connection.user_info(user_id)
-        try:
-            with open(os.path.join('profile_images', user_info[5]), 'rb') \
-                    as image:
-                user_info[5] = image.read()
-        except FileNotFoundError:
-            user_info[5] = ''
+        user_info[5] = self.open_file(user_info[5])
         self.send_message(user_info, client_socket)
+
+    def display_users(self, user_id, client_socket, current_value):
+        current_value = int(current_value[0])
+        user_info = self.database_connection.users_info(user_id, current_value)
+
+        for i in range(5, 18, 6):
+            try:
+                user_info[i] = self.open_file(user_info[i])
+            except IndexError:
+                pass
+
+        self.send_message(user_info, client_socket)
+
+    @staticmethod
+    def open_file(file_name):
+        try:
+            with open(os.path.join('profile_images', file_name), 'rb') \
+                    as image:
+                file_name = image.read()
+        except FileNotFoundError:
+            file_name = ''
+        return file_name
 
     @staticmethod
     def send_message(message, client_socket):

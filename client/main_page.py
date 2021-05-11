@@ -9,8 +9,13 @@ class MainPage(tk.Frame):
 
         self.controller = controller
 
-        browse_button = tk.Button(self, text='Browse the profiles',
-                                  font=NORMAL_FONT, width=17)
+        browse_button = tk.Button(
+            self,
+            text='Browse the profiles',
+            font=NORMAL_FONT,
+            command=lambda: self.controller.show_frame('BrowsProfilePage'),
+            width=17,
+        )
         browse_button.grid(row=0, column=0, padx=575, pady=(300, 10))
 
         messages_button = tk.Button(self, text='Messages', font=NORMAL_FONT,

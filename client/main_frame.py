@@ -5,6 +5,7 @@ from profile_page import ProfilePage
 from main_page import MainPage
 from display_profile_page import DisplayProfilePage
 from connection_error_page import ConnectionErrorPage
+from browse_profile_page import BrowsProfilePage
 from settings_page import (
     SettingsPage,
     ChangePasswordPage,
@@ -31,6 +32,7 @@ class MainFrame(tk.Tk):
             LoginPage, RegisterPage, ProfilePage, MainPage,
             SettingsPage, ConnectionErrorPage, ChangePasswordPage,
             DeleteAccountPage, CommunicatePage, DisplayProfilePage,
+            BrowsProfilePage,
         )
 
         for f in frame_list:
@@ -51,5 +53,6 @@ class MainFrame(tk.Tk):
         if arg:
             frame.choose_button()
 
-        if controller == 'DisplayProfilePage':
+        if controller == 'DisplayProfilePage' or \
+                controller == 'BrowsProfilePage':
             frame.display()

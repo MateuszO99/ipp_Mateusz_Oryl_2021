@@ -219,3 +219,27 @@ class DataManagement:
             information = [column for column in columns[0]]
 
             return information
+
+    def users_info(self, user_id, current_value):
+        with self.connection.cursor() as cur:
+            cur.execute("SELECT * FROM user_table "
+                        f"WHERE user_id <> {user_id} "
+                        "ORDER BY user_id DESC "
+                        f"OFFSET {current_value} "
+                        "FETCH FIRST 3 ROWS ONLY;")
+
+            rows = cur.fetchall()
+
+            information = []
+
+            for row in rows:
+                for column in row:
+                    information.append(column)
+
+            cur.execute("SELECT * FROM user_table "
+                        f"WHERE user_id <> {user_id};")
+            user_number = len(cur.fetchall())
+
+            information.append(user_number)
+
+            return information
