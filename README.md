@@ -15,3 +15,6 @@ Raport III 20.04.2021, wykonano:
 * Dodano możliwość zmiany hasła
 * Dodano możliwość usuwania konta
 * Dodano możliwość edycji profila użytkownika
+
+Raport IV 11.05.2021, wykonano:
+* Możliwość przeglądania profili innych użytkowników
