@@ -18,3 +18,6 @@ Raport III 20.04.2021, wykonano:
 
 Raport IV 11.05.2021, wykonano:
 * Możliwość przeglądania profili innych użytkowników
+
+Raport V 01.06.2021, wykonano:
+* Możliwość pisania do innych użytkowników
