@@ -18,8 +18,13 @@ class MainPage(tk.Frame):
         )
         browse_button.grid(row=0, column=0, padx=575, pady=(300, 10))
 
-        messages_button = tk.Button(self, text='Messages', font=NORMAL_FONT,
-                                    width=17)
+        messages_button = tk.Button(
+            self,
+            text='Messages',
+            font=NORMAL_FONT,
+            width=17,
+            command=lambda: self.controller.show_frame('MessagesPage'),
+        )
         messages_button.grid(row=1, column=0, pady=10)
 
         profile_button = tk.Button(

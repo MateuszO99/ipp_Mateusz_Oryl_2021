@@ -6,6 +6,8 @@ from main_page import MainPage
 from display_profile_page import DisplayProfilePage
 from connection_error_page import ConnectionErrorPage
 from browse_profile_page import BrowsProfilePage
+from send_message import SendMessagePage
+from messages import MessagesPage
 from settings_page import (
     SettingsPage,
     ChangePasswordPage,
@@ -22,6 +24,11 @@ class MainFrame(tk.Tk):
         self.connection = connection
         self.cancel_button_status = False
 
+        self.user_id = None
+        self.user_name = None
+
+        self.message_page = False
+
         container = tk.Frame(self)
         container.pack(side='top', fill='both', expand=True)
         container.grid_rowconfigure(0, minsize=900, weight=1)
@@ -32,7 +39,7 @@ class MainFrame(tk.Tk):
             LoginPage, RegisterPage, ProfilePage, MainPage,
             SettingsPage, ConnectionErrorPage, ChangePasswordPage,
             DeleteAccountPage, CommunicatePage, DisplayProfilePage,
-            BrowsProfilePage,
+            BrowsProfilePage, SendMessagePage, MessagesPage
         )
 
         for f in frame_list:
@@ -56,3 +63,7 @@ class MainFrame(tk.Tk):
         if controller == 'DisplayProfilePage' or \
                 controller == 'BrowsProfilePage':
             frame.display()
+        elif controller == 'SendMessagePage':
+            frame.update_msg()
+        elif controller == 'MessagesPage':
+            frame.show_messages()

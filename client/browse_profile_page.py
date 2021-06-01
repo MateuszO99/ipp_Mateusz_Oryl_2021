@@ -18,6 +18,7 @@ class BrowsProfilePage(tk.Frame):
         self.user_full_name = []
         self.user_age = []
         self.user_description = []
+        self.message_button = []
 
         self.previous_button = None
         self.next_button = None
@@ -68,12 +69,25 @@ class BrowsProfilePage(tk.Frame):
                 self.img[j].image = render
                 self.img[j].place(x=x, y=50)
 
+                self.message_button.append(tk.Button(
+                    self,
+                    text='Send message',
+                    font=NORMAL_FONT,
+                    width=22,
+                    command=lambda ind=i: self.send_message(
+                        receive_message[ind+0],
+                        receive_message[ind+1]
+                    )
+                ))
+                self.message_button[j].place(x=x+152, y=385,
+                                             anchor='center')
+
                 self.user_full_name.append(tk.Label(
                     self,
                     text=f'{receive_message[i+1]} {receive_message[i+2]}',
                     font=SMALL_FONT,
                 ))
-                self.user_full_name[j].place(x=x, y=375, anchor='w')
+                self.user_full_name[j].place(x=x, y=425, anchor='w')
 
                 recv_date = receive_message[i+4]
 
@@ -83,7 +97,7 @@ class BrowsProfilePage(tk.Frame):
                 delta_time = relativedelta(now, date).years
                 self.user_age.append(tk.Label(self, text=f'Age: {delta_time}',
                                      font=SMALL_FONT))
-                self.user_age[j].place(x=x, y=400, anchor='w')
+                self.user_age[j].place(x=x, y=445, anchor='w')
 
                 self.user_description.append(tk.Label(
                     self,
@@ -91,11 +105,17 @@ class BrowsProfilePage(tk.Frame):
                     font=SMALL_FONT, wraplength=300,
                     justify='left',
                 ))
-                self.user_description[j].place(x=x, y=420, anchor='nw')
+                self.user_description[j].place(x=x, y=465, anchor='nw')
 
                 j += 1
             except IndexError:
                 pass
+
+    def send_message(self, user_id, user_name):
+        self.controller.user_id = user_id
+        self.controller.user_name = user_name
+        self.clear()
+        self.controller.show_frame('SendMessagePage')
 
     def back(self):
         self.clear()
@@ -121,6 +141,7 @@ class BrowsProfilePage(tk.Frame):
                 self.user_full_name[i].destroy()
                 self.user_age[i].destroy()
                 self.user_description[i].destroy()
+                self.message_button[i].destroy()
             except IndexError:
                 pass
 
@@ -128,6 +149,7 @@ class BrowsProfilePage(tk.Frame):
         self.user_full_name = []
         self.user_age = []
         self.user_description = []
+        self.message_button = []
 
         if self.previous_button:
             self.previous_button.destroy()

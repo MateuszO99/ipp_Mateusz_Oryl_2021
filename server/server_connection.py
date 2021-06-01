@@ -79,6 +79,19 @@ class ServerConnection:
                             elif mode == 'user_profiles':
                                 self.display_users(user_id, client_socket,
                                                    message_content)
+                            elif mode == 'message':
+                                self.send_msg(user_id, client_socket,
+                                              message_content)
+                            elif mode == 'user_messages':
+                                self.display_messages(user_id, client_socket,
+                                                      message_content)
+                            elif mode == 'all_messages':
+                                self.display_all_messages(user_id,
+                                                          client_socket)
+                            elif mode == 'all_messages_names':
+                                self.display_all_names(client_socket)
+                            elif mode == 'my_id':
+                                self.send_message(user_id, client_socket)
                         break
 
             except ValueError:
@@ -161,6 +174,26 @@ class ServerConnection:
                 pass
 
         self.send_message(user_info, client_socket)
+
+    def send_msg(self, user_id, client_socket, message_content):
+        target_user_id = message_content[0]
+        message = ' '.join(message_content[1:])
+        self.database_connection.create_msg(user_id, target_user_id, message)
+        self.send_message('_', client_socket)
+
+    def display_messages(self, user_id, client_socket, target_id):
+        target_id = int(target_id[0])
+        messages = self.database_connection.display_messages(user_id,
+                                                             target_id)
+        self.send_message(messages, client_socket)
+
+    def display_all_messages(self, user_id, client_socket):
+        messages = self.database_connection.display_all_messages(user_id)
+        self.send_message(messages, client_socket)
+
+    def display_all_names(self, client_socket):
+        messages = self.database_connection.display_all_names()
+        self.send_message(messages, client_socket)
 
     @staticmethod
     def open_file(file_name):

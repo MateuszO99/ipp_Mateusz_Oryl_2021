@@ -47,6 +47,7 @@ class DataManagement:
                 port=DB_PORT,
             )
             print('Database connected successfully')
+
         except psycopg2.OperationalError:
             self.create_database()
 
@@ -92,6 +93,13 @@ class DataManagement:
                         "description VARCHAR(2000) NOT NULL,"
                         "birthday date,"
                         "profile_image TEXT NOT NULL);")
+
+            cur.execute("CREATE TABLE messages ("
+                        "message_id INT NOT NULL PRIMARY KEY "
+                        "GENERATED ALWAYS AS IDENTITY, "
+                        "user_id1 INT, "
+                        "user_id2 INT, "
+                        "content TEXT)")
         self.connection.commit()
         print('Tables created successfully')
 
@@ -243,3 +251,42 @@ class DataManagement:
             information.append(user_number)
 
             return information
+
+    def create_msg(self, user_id, target_user_id, message):
+        with self.connection.cursor() as cur:
+            cur.execute("INSERT INTO messages "
+                        "(user_id1, user_id2, content) "
+                        f"VALUES ('{user_id}', '{target_user_id}', "
+                        f"'{message}')")
+
+            self.connection.commit()
+
+    def display_messages(self, user_id, target_id):
+        with self.connection.cursor() as cur:
+            cur.execute("SELECT * FROM messages "
+                        f"WHERE (user_id1 = {user_id} "
+                        f"AND user_id2 = {target_id}) "
+                        f"OR (user_id1 = {target_id} "
+                        f"AND user_id2 = {user_id})")
+
+            columns = cur.fetchall()
+
+            return columns
+
+    def display_all_messages(self, user_id):
+        with self.connection.cursor() as cur:
+            cur.execute("SELECT * FROM messages "
+                        f"WHERE user_id1 = {user_id} "
+                        f"OR user_id2 = {user_id}")
+
+            columns = cur.fetchall()
+
+            return columns
+
+    def display_all_names(self):
+        with self.connection.cursor() as cur:
+            cur.execute("SELECT user_id, name FROM user_table")
+
+            columns = cur.fetchall()
+
+            return columns
